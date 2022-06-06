@@ -55,37 +55,39 @@ export class InvestmentPortfolio {
   }
 }
 
-// const myPortfolio = new InvestmentPortfolio();
+const myPortfolio = new InvestmentPortfolio();
 
-// myPortfolio.addStock(
-//   new Stock({
-//     name: "BTC",
-//     shares: 1200,
-//     buyingDate: new Date(2020, 3, 3),
-//     buyingPrice: 123,
-//   })
-// );
-// myPortfolio.addStock(
-//   new Stock({
-//     name: "DMA",
-//     shares: 183,
-//     buyingDate: new Date(2010, 6, 3),
-//     buyingPrice: 164564,
-//   })
-// );
-// myPortfolio.addStock(
-//   new Stock({
-//     name: "RTE",
-//     shares: 187,
-//     buyingDate: new Date(2009, 5, 3),
-//     buyingPrice: 56757,
-//   })
-// );
-// myPortfolio.addStock(
-//   new Stock({
-//     name: "JGL",
-//     shares: 25,
-//     buyingDate: new Date(2021, 2, 1),
-//     buyingPrice: 1288,
-//   })
-// );
+myPortfolio.addStock(
+  new Stock({
+    name: "BTC",
+    shares: 1200,
+    buyingDate: new Date(2020, 3, 3),
+    buyingPrice: 123,
+  })
+);
+myPortfolio.addStock(
+  new Stock({
+    name: "DMA",
+    shares: 183,
+    buyingDate: new Date(2010, 6, 3),
+    buyingPrice: 164564,
+  })
+);
+myPortfolio.addStock(
+  new Stock({
+    name: "RTE",
+    shares: 187,
+    buyingDate: new Date(2009, 5, 3),
+    buyingPrice: 56757,
+  })
+);
+myPortfolio.addStock(
+  new Stock({
+    name: "JGL",
+    shares: 25,
+    buyingDate: new Date(2021, 2, 1),
+    buyingPrice: 1288,
+  })
+);
+
+console.log(myPortfolio.getProfit(new Date(2010, 1, 1), new Date(2022, 1, 1)));
