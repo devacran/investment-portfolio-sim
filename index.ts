@@ -1,4 +1,13 @@
-class Stock {
+import { randomNumberBetween } from "./utils";
+
+interface IStock {
+  name: string;
+  shares: number;
+  buyingDate: Date;
+  buyingPrice: number;
+}
+
+export class Stock {
   public name: string;
   public shares: number;
   public buyingDate: Date;
@@ -15,14 +24,15 @@ class Stock {
     );
   }
 }
-class InvestmentPortfolio {
+
+export class InvestmentPortfolio {
   private stocks: Stock[] = [];
   profit: number = 0;
-  addStock(stocks: IStock | IStock[]) {
+  addStock(stocks: Stock | Stock[]) {
     if (Array.isArray(stocks)) {
-      stocks.forEach((stock) => this.stocks.push(new Stock(stock)));
+      this.stocks = this.stocks.concat(stocks);
     } else {
-      this.stocks.push(new Stock(stocks));
+      this.stocks.push(stocks);
     }
   }
   getStocks(): IStock[] {
@@ -38,46 +48,44 @@ class InvestmentPortfolio {
       if (stock.buyingDate > startDate) {
         continue;
       }
-      starterValue *= stock.buyingPrice * stock.shares;
+      starterValue += stock.buyingPrice * stock.shares;
       endValue += stock.getActualPrice() * stock.shares;
     }
     return endValue - starterValue;
   }
 }
-interface IStock {
-  name: string;
-  shares: number;
-  buyingDate: Date;
-  buyingPrice: number;
-}
 
-function randomNumberBetween(min: number, max: number) {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
+// const myPortfolio = new InvestmentPortfolio();
 
-const myPortfolio = new InvestmentPortfolio();
-
-myPortfolio.addStock({
-  name: "BTC",
-  shares: 1200,
-  buyingDate: new Date(2020, 3, 3),
-  buyingPrice: 123,
-});
-myPortfolio.addStock({
-  name: "DMA",
-  shares: 183,
-  buyingDate: new Date(2010, 6, 3),
-  buyingPrice: 164564,
-});
-myPortfolio.addStock({
-  name: "RTE",
-  shares: 187,
-  buyingDate: new Date(2009, 5, 3),
-  buyingPrice: 56757,
-});
-myPortfolio.addStock({
-  name: "JGL",
-  shares: 25,
-  buyingDate: new Date(2021, 2, 1),
-  buyingPrice: 1288,
-});
+// myPortfolio.addStock(
+//   new Stock({
+//     name: "BTC",
+//     shares: 1200,
+//     buyingDate: new Date(2020, 3, 3),
+//     buyingPrice: 123,
+//   })
+// );
+// myPortfolio.addStock(
+//   new Stock({
+//     name: "DMA",
+//     shares: 183,
+//     buyingDate: new Date(2010, 6, 3),
+//     buyingPrice: 164564,
+//   })
+// );
+// myPortfolio.addStock(
+//   new Stock({
+//     name: "RTE",
+//     shares: 187,
+//     buyingDate: new Date(2009, 5, 3),
+//     buyingPrice: 56757,
+//   })
+// );
+// myPortfolio.addStock(
+//   new Stock({
+//     name: "JGL",
+//     shares: 25,
+//     buyingDate: new Date(2021, 2, 1),
+//     buyingPrice: 1288,
+//   })
+// );
