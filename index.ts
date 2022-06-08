@@ -1,4 +1,5 @@
-import { mockStockPrices, randomNumberBetween } from "./utils";
+import { mockStockPrices } from "./utils";
+
 export type SuportedTicks = "AAPL" | "MSFT" | "GOOG" | "FB";
 interface IStock {
   name: SuportedTicks;
@@ -28,7 +29,7 @@ export class Stock {
 }
 export class InvestmentPortfolio {
   private stocks: Stock[] = [];
-  profit: number = 0;
+
   addStock(stocks: Stock | Stock[]) {
     if (Array.isArray(stocks)) {
       this.stocks = this.stocks.concat(stocks);
@@ -36,9 +37,11 @@ export class InvestmentPortfolio {
       this.stocks.push(stocks);
     }
   }
+
   getStocks(): IStock[] {
     return this.stocks;
   }
+
   getProfit(startDate: Date, endDate: Date): number {
     let buyingValue = 0;
     let startingValue = 0;
@@ -50,12 +53,12 @@ export class InvestmentPortfolio {
       if (stock.buyingDate > endDate) {
         continue;
       }
-      buyingValue += stock.buyingPrice * stock.shares; //40,000
-      startingValue += stock.getPrice(startDate) * stock.shares; //48,000
-      endValue += stock.getPrice(endDate) * stock.shares; //48,000
+      buyingValue += stock.buyingPrice * stock.shares;
+      startingValue += stock.getPrice(startDate) * stock.shares;
+      endValue += stock.getPrice(endDate) * stock.shares;
     }
-    const startingProfit = startingValue - buyingValue; //8,000
-    const profitValue = endValue - startingProfit; //8,000
+    const startingProfit = startingValue - buyingValue;
+    const profitValue = endValue - startingProfit;
     return profitValue;
   }
 }

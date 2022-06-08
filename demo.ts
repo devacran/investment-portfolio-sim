@@ -35,6 +35,9 @@ myPortfolio.addStock(
   })
 );
 
+// * Date range supported from January 1st, 2015 to December 31st, 2022
+// * This can be changed by changing the range in the generateMockStockPrices function
+
 console.log(
   myPortfolio.getProfit(new Date(2020, 10, 9), new Date(2020, 10, 10))
 );

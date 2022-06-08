@@ -6,6 +6,10 @@ export function randomNumberBetween(min: number, max: number) {
 }
 type IMockPrices = Record<string, Record<string, number>>;
 
+/*
+  Generate mock stock prices between 20 - 100 for each day
+  for a given date range
+*/
 export function generateMockStockPrices(
   stockList: string[],
   startDate: Date,
@@ -25,8 +29,9 @@ export function generateMockStockPrices(
   });
   return mockStockPrices;
 }
+
 export const mockStockPrices = generateMockStockPrices(
   MOCK_TICKS,
-  new Date(2015, 1, 1),
-  new Date(2022, 9, 9)
+  new Date(2015, 0, 1),
+  new Date(2022, 11, 31)
 );
