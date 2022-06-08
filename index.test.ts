@@ -1,4 +1,5 @@
 import { InvestmentPortfolio, Stock } from ".";
+import { mockStockPrices, MOCK_TICKS } from "./utils";
 
 describe("Test InvestmentPortfolio", () => {
   describe("InvestmentPortfolio --> getStocks", () => {
@@ -6,7 +7,7 @@ describe("Test InvestmentPortfolio", () => {
       const myPortfolio = new InvestmentPortfolio();
       myPortfolio.addStock(
         new Stock({
-          name: "Apple",
+          name: "FB",
           shares: 100,
           buyingDate: new Date("2020-01-01"),
           buyingPrice: 100,
@@ -14,7 +15,7 @@ describe("Test InvestmentPortfolio", () => {
       );
       myPortfolio.addStock(
         new Stock({
-          name: "Google",
+          name: "MSFT",
           shares: 100,
           buyingDate: new Date("2020-01-01"),
           buyingPrice: 100,
@@ -33,27 +34,26 @@ describe("Test InvestmentPortfolio", () => {
       const todayDate = new Date();
       const buyingMockPrice = 100;
       const actualMockPrice = 120;
-      const stock1 = new Stock({
-        name: "Apple",
-        shares: 100,
-        buyingDate: earlierDate,
-        buyingPrice: buyingMockPrice,
-      });
-      const stock2 = new Stock({
-        name: "Google",
-        shares: 100,
-        buyingDate: earlierDate,
-        buyingPrice: buyingMockPrice,
-      });
-      const PORTFOLIO_MOCK_PROFIT = 4000;
-      stock1.getActualPrice = () => actualMockPrice;
-      stock2.getActualPrice = () => actualMockPrice;
-      myPortfolio.addStock(stock1);
-      myPortfolio.addStock(stock2);
+      const shares = 100;
+      const stocksQty = MOCK_TICKS.length;
+      const buying = buyingMockPrice * shares * stocksQty;
+      const starting = actualMockPrice * shares * stocksQty;
+      const endValue = actualMockPrice * shares * stocksQty;
+      const startingProfit = starting - buying;
+      const profitValue = endValue - startingProfit;
 
-      expect(myPortfolio.getProfit(earlierDate, todayDate)).toBe(
-        PORTFOLIO_MOCK_PROFIT
-      );
+      MOCK_TICKS.forEach((mockTick) => {
+        const stock = new Stock({
+          name: mockTick,
+          shares,
+          buyingDate: earlierDate,
+          buyingPrice: buyingMockPrice,
+        });
+        stock.getPrice = () => actualMockPrice;
+        myPortfolio.addStock(stock);
+      });
+
+      expect(myPortfolio.getProfit(earlierDate, todayDate)).toBe(profitValue);
     });
 
     it("should return 0 when there is no stocks purchased between the given date range", () => {
@@ -63,22 +63,16 @@ describe("Test InvestmentPortfolio", () => {
       const todayDate = new Date();
       const buyingMockPrice = 100;
       const actualMockPrice = 120;
-      const stock1 = new Stock({
-        name: "Apple",
-        shares: 100,
-        buyingDate: todayDate,
-        buyingPrice: buyingMockPrice,
+      MOCK_TICKS.forEach((mockTick) => {
+        const stock = new Stock({
+          name: mockTick,
+          shares: 100,
+          buyingDate: todayDate,
+          buyingPrice: buyingMockPrice,
+        });
+        stock.getPrice = () => actualMockPrice;
+        myPortfolio.addStock(stock);
       });
-      const stock2 = new Stock({
-        name: "Google",
-        shares: 100,
-        buyingDate: todayDate,
-        buyingPrice: buyingMockPrice,
-      });
-      stock1.getActualPrice = () => actualMockPrice;
-      stock2.getActualPrice = () => actualMockPrice;
-      myPortfolio.addStock(stock1);
-      myPortfolio.addStock(stock2);
 
       expect(myPortfolio.getProfit(earlierDate, earlierDate2)).toBe(0);
     });
@@ -88,20 +82,15 @@ describe("Test InvestmentPortfolio", () => {
       const earlierDate = new Date("2020-01-01");
       const todayDate = new Date();
       const buyingMockPrice = 100;
-      const stock1 = new Stock({
-        name: "Apple",
-        shares: 100,
-        buyingDate: earlierDate,
-        buyingPrice: buyingMockPrice,
+      MOCK_TICKS.forEach((i) => {
+        const stock = new Stock({
+          name: i,
+          shares: 100,
+          buyingDate: earlierDate,
+          buyingPrice: buyingMockPrice,
+        });
+        myPortfolio.addStock(stock);
       });
-      const stock2 = new Stock({
-        name: "Google",
-        shares: 100,
-        buyingDate: earlierDate,
-        buyingPrice: buyingMockPrice,
-      });
-      myPortfolio.addStock(stock1);
-      myPortfolio.addStock(stock2);
 
       expect(() => myPortfolio.getProfit(todayDate, earlierDate)).toThrowError(
         "Start date must be earlier than end date"
@@ -114,13 +103,14 @@ describe("Test Stock", () => {
   describe("Stock --> getActualPrice", () => {
     it("should return an actual price of 120", () => {
       const stock = new Stock({
-        name: "Apple",
+        name: "FB",
         shares: 100,
         buyingDate: new Date("2020-01-01"),
         buyingPrice: 100,
       });
-
-      expect(stock.getActualPrice()).toBeDefined();
+      const date = new Date("2020-01-02");
+      const price = mockStockPrices["FB"][date.toLocaleDateString()];
+      expect(stock.getPrice(date)).toBe(price);
     });
   });
 });
